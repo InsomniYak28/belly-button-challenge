@@ -5,19 +5,31 @@ const url = "https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/
 function updateCharts(sample) {
     console.log(sample);
 
-    //iterate through sample data, store as sampleNames
+    //iterate through sample and metadata, store as sampleNames and metaData respectively
     d3.json(url).then(function (data) {
         let sampleNames = data.samples;
+        let metaNames = data.metadata;
 
         let sampleName = sampleNames.filter(x => x.id == sample);
+        let metaName = metaNames.filter(x => x.id == sample);
+        console.log(metaName);
         console.log(sampleName);
+
         let result = sampleName[0];
+        let metaResult = metaName[0];
+        console.log(metaResult);
         console.log(result);
 
-        //define sample variables
+        //define sample and metadata.wfreq variables
         let sampleValues = result.sample_values.slice(0, 10).reverse();
         let otuLabels = result.otu_labels.slice(0, 10).reverse();
         let otuIds = result.otu_ids.slice(0, 10).reverse();
+        let wfreq = metaResult.wfreq;
+        
+        //key-value for metadata
+        Object.entries(metaNames).forEach(([key, value]) => {
+            console.log(`${key} ${value}`);
+          });
 
         //bar plot
         let trace1 = {
@@ -26,6 +38,7 @@ function updateCharts(sample) {
             type: "bar",
             orientation: "h",
             text: otuLabels,
+            title: "Grouped by OTU (Bacteria Cluster)",
             transforms: [{
                 type: 'sort',
                 target: 'x',
@@ -53,48 +66,19 @@ function updateCharts(sample) {
         let traceData2 = [trace2];
         Plotly.newPlot("bubble", traceData2);
 
-
-        //iterate through metadata and save as metaData
-        let metaData = data.metadata;
-        let meta = metaData.filter(x => x.id == sample);
-        console.log(meta);
-        let results = meta[0];
-        console.log(results);
-
-        //define metadata variables
-        let id = results.id;
-        let ethnicity = results.ethnicity;
-        let gender = results.gender;
-        let age = results.age;
-        let location = results.location;
-        let bbtype = results.bbtype;
-        let wfreq = results.wfreq;
-
         //BONUS gauge plot
         let trace3 = [
             {
-                //domain: { x: [0, 1], y: [0, 1] },
                 value: wfreq,
-                title: { text: "Washing Frequency - times per week" },
+                title: {'text': "Washing Frequency - times per week" },
                 type: "indicator",
                 mode: "gauge+number",
-                gauge: {axis:
-                    {range: [null, 9]},
-                    steps: [                        
-                    {range: [null,2], color: "white"},
-                    {range: [2,4], color: "yellow"},
-                    {range: [4,6], color: "lightgreen"},
-                    {range: [7,9], color: "green"}]
+                gauge: {axis:{range: [0, 9]},
                 }
                 
               }
         ];
-        let traceData3 = [trace3];
-        Plotly.newPlot("gauge", traceData3);
-
-        //#sample-metadata, create ol, add metadata variables to ol as li
-
-
+        Plotly.newPlot("gauge", trace3);
     });
 }
 
