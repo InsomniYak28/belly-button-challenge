@@ -25,29 +25,31 @@ function updateCharts(sample) {
         let otuLabels = result.otu_labels.slice(0, 10).reverse();
         let otuIds = result.otu_ids.slice(0, 10).reverse();
         let wfreq = metaResult.wfreq;
-        
-        //key-value for metadata
-        Object.entries(metaNames).forEach(([key, value]) => {
-            console.log(`${key} ${value}`);
-          });
 
-        //bar plot
+        //display metadata in Demographic panel w key-value loop
+        for (const [key, value] of Object.entries(metaResult).splice(0,7).reverse()) {
+            console.log(`${key}: ${value}`);
+            d3.select("#sample-metadata").text(`${key}: ${value}`);
+        };
+
+        //bar plot in ascending order
         let trace1 = {
             x: otuIds,
             y: sampleValues.map(x => `OTU ${x}`),
             type: "bar",
             orientation: "h",
             text: otuLabels,
-            title: "Grouped by OTU (Bacteria Cluster)",
             transforms: [{
                 type: 'sort',
                 target: 'x',
                 order: 'ascending'
             }]
         };
-       
+        let layout = {
+            title: "Grouped by OTU (Bacteria Cluster)"
+        };
         let traceData1 = [trace1];
-        Plotly.newPlot("bar", traceData1);
+        Plotly.newPlot("bar", traceData1, layout);
 
         //bubble plot
         let trace2 = {
@@ -75,17 +77,17 @@ function updateCharts(sample) {
                 mode: "gauge+number",
                 gauge: {axis:{range: [0, 9]},
                 }
-                
               }
         ];
         Plotly.newPlot("gauge", trace3);
     });
 }
 
-//update and initialize
+//update and log
 function updateMeta(params) {
     console.log(params);
 }
+//initialize data on drop-down change
 function init() {
     let dropDown = d3.select("#selDataset");
 
@@ -99,7 +101,7 @@ function init() {
         updateCharts(dropNames[0]);
     });
 }
-
+//update plots
 function optionChanged(params) {
     updateCharts(params);
     updateMeta(params);
