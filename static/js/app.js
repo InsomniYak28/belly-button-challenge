@@ -20,17 +20,32 @@ function updateCharts(sample) {
         console.log(metaResult);
         console.log(result);
 
-        //define sample and metadata.wfreq variables
+        //define sample and metadata variables
         let sampleValues = result.sample_values.slice(0, 10).reverse();
         let otuLabels = result.otu_labels.slice(0, 10).reverse();
         let otuIds = result.otu_ids.slice(0, 10).reverse();
+        let id = metaResult.id;
+        let ethnicity = metaResult.ethnicity;
+        let gender = metaResult.gender;
+        let age = metaResult.age;
+        let location = metaResult.location;
+        let bbtype = metaResult.bbtype;
         let wfreq = metaResult.wfreq;
 
-        //display metadata in Demographic panel w key-value loop
-        for (const [key, value] of Object.entries(metaResult).splice(0,7).reverse()) {
-            console.log(`${key}: ${value}`);
-            d3.select("#sample-metadata").text(`${key}: ${value}`);
-        };
+        //display metadata in Demographic panel
+        // for (const [key, value] of Object.entries(metaResult).splice(0,7).reverse()) {
+        //     console.log(`${key}: ${value}`);
+        //     d3.select("#sample-metadata").text(`${key}: ${value}`);
+        // };
+
+        d3.select("#id").text(`id: ${id}`);
+        d3.select("#ethnicity").text(`ethnicity: ${ethnicity}`);
+        d3.select("#gender").text(`gender: ${gender}`);
+        d3.select("#age").text(`age: ${age}`);
+        d3.select("#location").text(`location: ${location}`);
+        d3.select("#bbtype").text(`belly btutton type: ${bbtype}`);
+        d3.select("#wfreq").text(`wash frequency: ${wfreq}`);
+
 
         //bar plot in ascending order
         let trace1 = {
