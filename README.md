@@ -20,6 +20,6 @@ Personal challenges:
 Displaying the metadata in the Demographic panel was challenging. First, I tried using object.entries() in a loop of the metaResults variable to parse the metadata into key and value object pairs, then use the d3 method to display the text. Only one object array would display on the app page. I then created rows within the panel body and simply displayed the variables to each panel row by id. This does work, but it's rigid and repeatative, since the variables could - in theory - change, and a for loop would automatically update any changes. A for loop is also much more efficient.
 The gauge plot was also a struggle, as it has a different plot syntax than the bar and bubble plots. Using square brackets structured the plot, and reading the trace directly into the plot - instead of saving it to a TraceData variable cleared up the issues for me.
 
-Final project link: 
+Final project link: https://insomniyak28.github.io/belly-button-challenge/
 Data Source: http://robdunnlab.com/projects/belly-button-biodiversity/
 Helpful links: https://plotly.com/javascript/gauge-charts/
